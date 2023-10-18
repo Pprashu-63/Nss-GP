@@ -1,0 +1,61 @@
+---
+- name: Create directories for Nexus
+  file:
+    path: "{{ item }}"
+    state: directory
+  loop:
+    - /opt/nexus/
+    - /tmp/nexus/
+  become: yes
+
+- name: Download Nexus
+  get_url:
+    url: "{{ nexus_url }}"
+    dest: /tmp/nexus/nexus.tar.gz
+  become: yes
+
+- name: Extract Nexus
+  command: "tar xzvf /tmp/nexus/nexus.tar.gz -C /tmp/nexus/"
+  become: yes
+  args:
+    chdir: /tmp/nexus/
+
+- name: Debug Nexus Directory
+  debug:
+    var: lookup('fileglob', '/tmp/nexus/*')
+  become: yes
+
+- name: Add nexus user
+  user:
+    name: nexus
+    state: present
+  become: yes
+
+- name: Change ownership of Nexus directory
+  command: "chown -R nexus:nexus /tmp/nexus"
+  become: yes
+
+- name: Copy Nexus systemd service
+  copy:
+    src: nexus.service
+    dest: /etc/systemd/system/nexus.service
+  become: yes
+
+- name: Set run_as_user in nexus.rc
+  lineinfile:
+    path: "/tmp/nexus/{{ nexus_dir }}/bin/nexus.rc"
+    line: "run_as_user=\"nexus\""
+  become: yes
+
+- name: Reload systemd daemon
+  systemd:
+    daemon_reload: yes
+  become: yes
+
+- name: Start Nexus service
+  service:
+    name: nexus
+    enabled: yes
+    state: started
+  become: yes
+
