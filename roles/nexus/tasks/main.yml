@@ -37,7 +37,7 @@
 
 - name: Copy Nexus systemd service
   copy:
-    src: /home/ubuntu/nexus-pg/roles/nexus/files/nexus.service
+    src: nexus.jq
     dest: /etc/systemd/system/nexus.service
   become: yes
 
