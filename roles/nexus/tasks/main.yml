@@ -11,11 +11,11 @@
 - name: Download Nexus
   get_url:
     url: "{{ nexus_url }}"
-    dest: /tmp/nexus/nexus.tar.gz
+    dest: /opt/nexus/nexus.tar.gz
   become: yes
 
 - name: Extract Nexus
-  command: "tar xzvf /tmp/nexus/nexus.tar.gz -C /opt/nexus/"
+  command: "tar xzvf /tmp/nexus/nexus.tar.gz -C"
   become: yes
   args:
     chdir: /opt/nexus/
