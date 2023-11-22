@@ -15,7 +15,7 @@
   become: yes
 
 - name: Extract Nexus
-  command: "tar xzvf /tmp/nexus/nexus.tar.gz -C"
+  command: "tar xzvf /opt/nexus/nexus.tar.gz"
   become: yes
   args:
     chdir: /opt/nexus/
