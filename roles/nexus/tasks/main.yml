@@ -15,14 +15,14 @@
   become: yes
 
 - name: Extract Nexus
-  command: "tar xzvf /tmp/nexus/nexus.tar.gz -C /tmp/nexus/"
+  command: "tar xzvf /tmp/nexus/nexus.tar.gz -C /opt/nexus/"
   become: yes
   args:
-    chdir: /tmp/nexus/
+    chdir: /opt/nexus/
 
 - name: Debug Nexus Directory
   debug:
-    var: lookup('fileglob', '/tmp/nexus/*')
+    var: lookup('fileglob', '/opt/nexus/*')
   become: yes
 
 - name: Add nexus user
@@ -32,7 +32,7 @@
   become: yes
 
 - name: Change ownership of Nexus directory
-  command: "chown -R nexus:nexus /tmp/nexus"
+  command: "chown -R nexus:nexus /opt/nexus"
   become: yes
 
 - name: Copy Nexus systemd service
@@ -43,7 +43,7 @@
 
 - name: Set run_as_user in nexus.rc
   lineinfile:
-    path: "/tmp/nexus/{{ nexus_dir }}/bin/nexus.rc"
+    path: "/opt/nexus/{{ nexus_dir }}/bin/nexus.rc"
     line: "run_as_user=\"nexus\""
   become: yes
 
