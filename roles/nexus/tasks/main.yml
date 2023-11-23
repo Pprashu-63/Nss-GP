@@ -5,7 +5,6 @@
     state: directory
   loop:
     - /opt/nexus/
-    - /tmp/nexus/
   become: yes
 
 - name: Download Nexus
